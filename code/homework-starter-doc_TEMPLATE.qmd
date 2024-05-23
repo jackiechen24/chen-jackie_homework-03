@@ -51,7 +51,7 @@ drought_exp <- read_xlsx(path = here("data",
 
 # quick look at data 
 str(drought_exp)
-class(drought_exp)
+class(drought_exp) # table dataframe object
 ```
 
 ## cleaning
@@ -93,13 +93,23 @@ ggpairs(drought_exp_clean, # data frame
   theme(panel.grid = element_blank()) # getting rid of gridlines
 ```
 
+Diagonal: density of curve describing distribution of variable (e.g. distribution of leaf dry weight right skewed); density functions somewhat similar to histogram
+
+Bottom left diagonal: scatterplots relating all of these continuous variables to each other; bottom left plot - leaf dry weight on x-axis and total dry weight on y-axis
+
+Calculated Pearson Correlation Coefficient; in the right: all the calculated correlation coefficients represented down below; Pearson Correlation Coefficient: total mass is significantly positively correlated with leaf dry weight
+
 Choose 3 pairs of variables to compare. Make notes of those comparisons below.    
 
-**insert comparison 1 here**  
+**Total mass and root mass are strongly positively correlated (Pearson's r = 0.858)**  
 
-**insert comparison 2 here**  
+**Leaf dry mass and specific leaf area are not correlated (Pearson's r = 0.033)**  
 
-**insert comparison 3 here**
+**Shoot mass and total mass are strongly positively correlated (Pearson's r = 0.902)**
+
+**Shoot mass is positively correlated with root mass (Pearson's r = 0.553)**
+
+Correlograms
 
 ## Preliminary visualizations  
 
