@@ -45,10 +45,43 @@ str(drought_exp)
 class(drought_exp) # table dataframe object
 ```
 
-## Cleaning the data
+# Problem 1. Multiple linear regression: model selection and construction (52 points)
+
+## a. Make a table or list of all the models from class and the last one you constructed on your own. Write a caption for your table. (8 points)
+Caption: table captions typically go above the table. Number the table and provide a title. Describe what is in the table (columns and rows).
+
+Table: In your table, each row should be a model with the model number (1, 2, 3, etc.) and the predictors for each model
+
+## b. Write a 5-6 sentence “statistical methods” section. (8 points)
+Your answer should be in paragraph form and include:
+
+- how you addressed the central question(s) (i.e. to examine the influence of ____, ____, and ____ on _____, I…)
+
+- how you chose the final model (i.e. to determine the model that best described ____, I…)
+
+- how you visually determined that your final model conformed to the assumptions of a linear model (i.e. to evaluate linear model assumptions, I…)
+
+## c. Make a visualization of the model predictions with underlying data for your “best” model. (20 points)
+Show and annotate all your code. For full credit:
+
+- make the underlying data more transparent than the model predictions
+
+- display species names in full (not as species codes like ENCCAL or ESCCAL)
+
+- display water treatment types in full (not as WW or DS)
+
+- represent well-watered and drought stressed treatments with different colors
+
+- use colors that are not the default ggplot() colors
+
+- facet your plot by species
+
+- remove the legend
+
+- finalize the plot
 
 ```{r}
-# cleaning
+# cleaning the data
 drought_exp_clean <- drought_exp %>% 
   clean_names() %>% # nicer column names
   mutate(species_name = case_when( # adding column with species scientific names
@@ -68,3 +101,39 @@ drought_exp_clean <- drought_exp %>%
   relocate(water_treatment, .after = water) # moving water_treatment column after water
 ```
 
+## d. Write a caption for your visualization. (6 points)
+Include a data citation.
+
+## e. Write a 3-4 sentence results section. (10 points)
+Your answer should be in paragraph form and address the following points:
+
+- what predictors “best” described total mass (include model statistics here)?
+
+- on average, what differences did you find between water treatments?
+
+- on average, what differences did you find between species?
+
+# Problem 2. Affective visualization (24 points)
+
+## a. Describe in words what an affective visualization could look like for your personal data (3-5 sentences). (2 points)
+
+## b. Create a sketch (on paper) of your idea. (2 points)
+Include a photo of this sketch in your submission.
+
+## c. Make a draft of your visualization. (12 points)
+Feel free to be creative with this! You do not have to do this in R. You could create a sculpture, painting, textile object, etc.
+
+If you are making your visualization in R, show the annotated code and the output.
+
+If you are making your visualization outside of R, include a photo of your visualization in your submission.
+
+## d. Write an artist statement. (8 points)
+An artist statement gives the audience context to understand your work. Write 4-5 sentences to address:
+
+- the content of your piece (what are you showing?)
+
+- the influences (what did techniques/artists/etc. did you find influential in creating your work?)
+
+- the form of your work (written code, watercolor, oil painting, etc.)
+
+- your process (how did you create your work?)
