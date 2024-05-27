@@ -45,41 +45,7 @@ str(drought_exp)
 class(drought_exp) # table dataframe object
 ```
 
-# Problem 1. Multiple linear regression: model selection and construction (52 points)
-
-## a. Make a table or list of all the models from class and the last one you constructed on your own. Write a caption for your table. (8 points)
-Caption: table captions typically go above the table. Number the table and provide a title. Describe what is in the table (columns and rows).
-
-Table: In your table, each row should be a model with the model number (1, 2, 3, etc.) and the predictors for each model
-
-## b. Write a 5-6 sentence “statistical methods” section. (8 points)
-Your answer should be in paragraph form and include:
-
-- how you addressed the central question(s) (i.e. to examine the influence of ____, ____, and ____ on _____, I…)
-
-- how you chose the final model (i.e. to determine the model that best described ____, I…)
-
-- how you visually determined that your final model conformed to the assumptions of a linear model (i.e. to evaluate linear model assumptions, I…)
-
-## c. Make a visualization of the model predictions with underlying data for your “best” model. (20 points)
-Show and annotate all your code. For full credit:
-
-- make the underlying data more transparent than the model predictions
-
-- display species names in full (not as species codes like ENCCAL or ESCCAL)
-
-- display water treatment types in full (not as WW or DS)
-
-- represent well-watered and drought stressed treatments with different colors
-
-- use colors that are not the default ggplot() colors
-
-- facet your plot by species
-
-- remove the legend
-
-- finalize the plot
-
+## Cleaning
 ```{r}
 # cleaning the data
 drought_exp_clean <- drought_exp %>% 
@@ -100,6 +66,94 @@ drought_exp_clean <- drought_exp %>%
   )) %>% 
   relocate(water_treatment, .after = water) # moving water_treatment column after water
 ```
+
+# Problem 1. Multiple linear regression: model selection and construction (52 points)
+
+## a. Make a table or list of all the models from class and the last one you constructed on your own. Write a caption for your table. (8 points)
+Caption: table captions typically go above the table. Number the table and provide a title. Describe what is in the table (columns and rows).
+
+Table: In your table, each row should be a model with the model number (1, 2, 3, etc.) and the predictors for each model
+
+1. **total mass is not predicted by any of the 3 predictors** (null model)
+
+```{r}
+model1 <- lm(total_g ~ 1, # formula
+             data = drought_exp_clean) # data frame
+```
+
+2. **total mass predicted by SLA, water treatment, and species** (saturated model)
+
+```{r}
+# saturated model
+model2 <- lm(total_g ~ sla + water_treatment + species_name,
+             data = drought_exp_clean)
+```
+
+3. **total biomass as a function of SLA and water treatment**  
+
+```{r}
+model3 <- lm(total_g ~ sla + water_treatment,
+             data = drought_exp_clean)
+```
+
+4. **total biomass as a function of SLA and species**  
+
+```{r}
+model4 <- lm(total_g ~ sla + species_name,
+             data = drought_exp_clean)
+```
+
+5. **total biomass as a function of water treatment and species**
+
+```{r}
+model5 <- lm(total_g ~ water_treatment + species_name,
+             data = drought_exp_clean)
+```
+
+Model selection
+```{r}
+model.sel(model1,
+          model2, 
+          model3, 
+          model4,
+          model5)
+```
+
+Model diagnostics
+```{r}
+par(mfrow = c(2, 2))
+plot(model5)
+```
+
+## b. Write a 5-6 sentence “statistical methods” section. (8 points)
+Your answer should be in paragraph form and include:
+
+- how you addressed the central question(s) (i.e. to examine the influence of ____, ____, and ____ on _____, I…)
+
+- how you chose the final model (i.e. to determine the model that best described ____, I…)
+
+- how you visually determined that your final model conformed to the assumptions of a linear model (i.e. to evaluate linear model assumptions, I…)
+
+To examine the influence of SLA, water treatment, and species on total biomass, I made a table of all of the possible models (the null model, the saturated model, and the models with combinations of some of the predictors). To determine the model that best described the total biomass, I looked at the AIC of all of the models. The model with the lowest AIC is the best model that describes total mass without sacrificing complexity, and out of the five models we have tried, the best model is the one that includes the predictors of water treatment and species. To evaluate linear model assumptions, I looked at the diagnostics of this model. The diagnostics for this model look good because the standardized residuals might flare out a bit but potentially is not a big deal and so the residuals are homoscedastic, the Q-Q Plot (Q-Q Residuals) shows a mostly straight line aside from a little bit of flare out at the tails and so the residuals are normally distributed, and there does not seem to be any outliers since there does not appear to be anything outside the dotted lines when looking at the Constant Leverage: Residuals vs Factor Levels Plot.
+
+## c. Make a visualization of the model predictions with underlying data for your “best” model. (20 points)
+Show and annotate all your code. For full credit:
+
+- make the underlying data more transparent than the model predictions
+
+- display species names in full (not as species codes like ENCCAL or ESCCAL)
+
+- display water treatment types in full (not as WW or DS)
+
+- represent well-watered and drought stressed treatments with different colors
+
+- use colors that are not the default ggplot() colors
+
+- facet your plot by species
+
+- remove the legend
+
+- finalize the plot
 
 ## d. Write a caption for your visualization. (6 points)
 Include a data citation.
