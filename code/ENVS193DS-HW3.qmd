@@ -110,6 +110,20 @@ model5 <- lm(total_g ~ water_treatment + species_name,
              data = drought_exp_clean)
 ```
 
+Table of Models
+```{r}
+# comparing models
+modelsummary::modelsummary( # this function takes a list of models
+  list( 
+    "null" = model1, # "model name" = model object
+    "model 2" = model2,
+    "model 3" = model3,
+    "model 4" = model4,
+    "model 5" = model5
+  )
+)
+```
+
 Model selection
 ```{r}
 model.sel(model1,
@@ -155,6 +169,48 @@ Show and annotate all your code. For full credit:
 
 - finalize the plot
 
+Model predictions
+```{r}
+model_preds <- ggpredict(model5, 
+                         terms = c("water_treatment", 
+                                   "species_name"))
+```
+
+
+```{r}
+# creating new data frame of model predictions for plotting
+model_preds_for_plotting <- model_preds %>% 
+  rename(water_treatment = x, # renaming columns to make this easier to use
+         species_name = group)
+
+# use View(model_preds_for_plotting) 
+# to compare this to the original model_preds data frame
+
+ggplot() +
+  # underlying data
+  geom_jitter(data = drought_exp_clean,
+             aes(x = water_treatment,
+                 y = total_g,
+                 color = water_treatment)) +
+  # model prediction 95% CI ribbon
+  geom_ribbon(data = model_preds_for_plotting,
+              aes(x = water_treatment, 
+                  y = predicted,
+                  ymin = conf.low,
+                  ymax = conf.high,
+                  fill = water_treatment),
+              alpha = 0.2) +
+  # model prediction lines
+  geom_line(data = model_preds_for_plotting,
+            aes(x = water_treatment, 
+                y = predicted,
+                color = water_treatment)) +
+  # cleaner theme
+  theme_classic() +
+  # creating different panels for species
+  facet_wrap(~species_name)
+```
+
 ## d. Write a caption for your visualization. (6 points)
 Include a data citation.
 
@@ -170,6 +226,8 @@ Your answer should be in paragraph form and address the following points:
 # Problem 2. Affective visualization (24 points)
 
 ## a. Describe in words what an affective visualization could look like for your personal data (3-5 sentences). (2 points)
+
+An affective visualization could
 
 ## b. Create a sketch (on paper) of your idea. (2 points)
 Include a photo of this sketch in your submission.
@@ -191,3 +249,24 @@ An artist statement gives the audience context to understand your work. Write 4-
 - the form of your work (written code, watercolor, oil painting, etc.)
 
 - your process (how did you create your work?)
+
+# Problem 3. Statistical critique (36 points)
+At this point, you have seen and created a lot of figures for this class. Revisit the paper you chose for your critique and your homework 2, where you described figures or tables in the text. Address the following in full sentences (3-4 sentences each).
+
+For this section of your homework, you will be evaluated on the logic, conciseness, and nuance of your critique.
+
+## a. Revisit and summarize (6 points)
+What are the statistical tests the authors are using to address their main research question?
+
+Insert the figure or table you described in Homework 2 here.
+
+## b. Visual clarity (10 points)
+How clearly did the authors visually represent their statistics in figures? For example, are the x- and y-axes in a logical position? Do they show summary statistics (means and SE, for example) and/or model predictions, and if so, do they show the underlying data?
+
+## c. Aesthetic clarity (10 points)
+How well did the authors handle “visual clutter”? How would you describe the the data:ink ratio?
+
+## d. Recommendations (can be longer than 4 sentences, 10 points)
+What recommendations would you make to make the figure better? What would you take out, add, or change? Provide explanations/justifications for each of your recommendations.
+
+Alternatively, if they did not represent their statistics in a figure, what kind of figure would you recommend to them? Describe the x- and y-axes, with any geometries and aesthetics (colors, etc.). Provide enough explanation such that someone would be able to create the figure you describe in code. Provide explanations/justifications for the figure you would recommend.
