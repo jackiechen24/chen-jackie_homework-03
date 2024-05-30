@@ -62,9 +62,9 @@ drought_exp_clean <- drought_exp %>%
   relocate(water_treatment, .after = water) # moving water_treatment column after water
 ```
 
-# Problem 1. Multiple linear regression: model selection and construction (52 points)
+# Problem 1. Multiple linear regression: model selection and construction
 
-## a. Make a table or list of all the models from class and the last one you constructed on your own. Write a caption for your table. (8 points)
+## a. Make a table or list of all the models from class and the last one you constructed on your own. Write a caption for your table.
 
 1. **total mass is not predicted by any of the 3 predictors** (null model)
 
@@ -117,5 +117,10 @@ Model diagnostics
 ```{r}
 par(mfrow = c(2, 2))
 plot(model5)
+```
+
+## e. Write a 3-4 sentence results section.
+```{r}
+summary(model5)
 ```
 

@@ -45,6 +45,8 @@ Table: In your table, each row should be a model with the model number (1, 2, 3,
 
 Table of Models
 
+Table 1.
+
 ## b. Write a 5-6 sentence “statistical methods” section. (8 points)
 Your answer should be in paragraph form and include:
 
@@ -139,7 +141,7 @@ model_preds_for_plotting <- model_preds %>%
         axis.text.x = element_text(angle = 60, hjust = 1),
         plot.title = element_text(size = 16, face = "bold")) +
   # Adding titles and labels
-  labs(title = "Visualization of Model Predictions",
+  labs(title = "Model Predictions Visualization with Underlying Data",
        x = "Water Treatment",
        y = "Total Biomass Predictions")
 ```
@@ -147,14 +149,20 @@ model_preds_for_plotting <- model_preds %>%
 ## d. Write a caption for your visualization. (6 points)
 Include a data citation.
 
+Data from Dryad (Valliere, 2019).
+
+Figure 1. Total biomass predictions with underlying data are higher in the well watered water treatment than the drought stressed water treatment. The plotted data are the mean and 95% confidence interval of the total biomass predictions (g), as well as the underlying data of the total biomass (g), of the well watered water treatment and drought stressed water treatment for the species Acmispon glaber, Encelia californica, Eschscolzia californica, Grindelia camporum, Nasella pulchra, Penstemon centranthifolius, and Salvia leucophylla (n = 5). The green data points represent the well watered water treatment, while the brown data points represent the drought stressed water treatment.
+
 ## e. Write a 3-4 sentence results section. (10 points)
 Your answer should be in paragraph form and address the following points:
 
-- what predictors “best” described total mass (include model statistics here)?
+- what predictors "best" described total mass (include model statistics here)?
 
 - on average, what differences did you find between water treatments?
 
 - on average, what differences did you find between species?
+
+The predictors that "best" described total mass were water treatment and species (Adjusted R^2 = 0.7257, F(7, 62) = 27.08, p-value < 0.001, AIC = -156.2, alpha = 0.05). On average, total mass was higher in the well watered water treatment than the drought stressed water treatment. The Grindelia camporum species on average had the highest total mass out of all the species, while the Acmispon glaber species had the lowest total mass out of all the species.
 
 # Problem 2. Affective visualization (24 points)
 
