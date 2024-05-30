@@ -1,0 +1,121 @@
+---
+title: "Homework 3 Additional Code"
+date: 2024-06-02
+author: "Jackie Chen"
+format: docx
+---
+
+[Forked repository](https://github.com/jackiechen24/chen-jackie_homework-03)
+
+# Set Up
+
+## Reading in packages/data
+```{r}
+# general use
+library(tidyverse)
+library(readxl)
+library(here)
+library(janitor)
+
+# visualizing pairs
+library(GGally)
+
+# model selection
+library(MuMIn)
+
+# model predictions
+library(ggeffects)
+
+# model tables
+library(gtsummary)
+library(flextable)
+library(modelsummary)
+
+drought_exp <- read_xlsx(path = here("data", 
+                                     "Valliere_etal_EcoApps_Data.xlsx"),
+                         sheet = "First Harvest")
+
+# quick look at data 
+str(drought_exp)
+class(drought_exp) # table dataframe object
+```
+
+## Cleaning
+```{r}
+# cleaning the data
+drought_exp_clean <- drought_exp %>% 
+  clean_names() %>% # nicer column names
+  mutate(species_name = case_when( # adding column with species scientific names
+    species == "ENCCAL" ~ "Encelia californica", # bush sunflower
+    species == "ESCCAL" ~ "Eschscholzia californica", # California poppy
+    species == "PENCEN" ~ "Penstemon centranthifolius", # Scarlet bugler
+    species == "GRICAM" ~ "Grindelia camporum", # great valley gumweed
+    species == "SALLEU" ~ "Salvia leucophylla", # Purple sage
+    species == "STIPUL" ~ "Nasella pulchra", # Purple needlegrass
+    species == "LOTSCO" ~ "Acmispon glaber" # deerweed
+  )) %>% 
+  relocate(species_name, .after = species) %>% # moving species_name column after species
+  mutate(water_treatment = case_when( # adding column with full treatment names
+    water == "WW" ~ "Well watered",
+    water == "DS" ~ "Drought stressed"
+  )) %>% 
+  relocate(water_treatment, .after = water) # moving water_treatment column after water
+```
+
+# Problem 1. Multiple linear regression: model selection and construction (52 points)
+
+## a. Make a table or list of all the models from class and the last one you constructed on your own. Write a caption for your table. (8 points)
+
+1. **total mass is not predicted by any of the 3 predictors** (null model)
+
+```{r}
+model1 <- lm(total_g ~ 1, # formula
+             data = drought_exp_clean) # data frame
+```
+
+2. **total mass predicted by SLA, water treatment, and species** (saturated model)
+
+```{r}
+# saturated model
+model2 <- lm(total_g ~ sla + water_treatment + species_name,
+             data = drought_exp_clean)
+```
+
+3. **total biomass as a function of SLA and water treatment**  
+
+```{r}
+model3 <- lm(total_g ~ sla + water_treatment,
+             data = drought_exp_clean)
+```
+
+4. **total biomass as a function of SLA and species**  
+
+```{r}
+model4 <- lm(total_g ~ sla + species_name,
+             data = drought_exp_clean)
+```
+
+5. **total biomass as a function of water treatment and species**
+
+```{r}
+model5 <- lm(total_g ~ water_treatment + species_name,
+             data = drought_exp_clean)
+```
+
+Model selection
+```{r}
+model.sel(model1,
+          model2, 
+          model3, 
+          model4,
+          model5)
+```
+
+model5 (the one that includes the predictors of water treatment and species) has lowest AIC
+
+Model diagnostics
+```{r}
+par(mfrow = c(2, 2))
+plot(model5)
+```
+

@@ -2,12 +2,7 @@
 title: "Homework 3"
 date: 2024-06-02
 author: "Jackie Chen"
-format:
-  html: 
-    toc: true # includes a table of contents in rendered html format
-execute: # for all code chunks
-    warning: false # do not display warnings
-    message: false # do not display messages
+format: docx
 ---
 
 [Forked repository](https://github.com/jackiechen24/chen-jackie_homework-03)
@@ -39,32 +34,6 @@ library(modelsummary)
 drought_exp <- read_xlsx(path = here("data", 
                                      "Valliere_etal_EcoApps_Data.xlsx"),
                          sheet = "First Harvest")
-
-# quick look at data 
-str(drought_exp)
-class(drought_exp) # table dataframe object
-```
-
-## Cleaning
-```{r}
-# cleaning the data
-drought_exp_clean <- drought_exp %>% 
-  clean_names() %>% # nicer column names
-  mutate(species_name = case_when( # adding column with species scientific names
-    species == "ENCCAL" ~ "Encelia californica", # bush sunflower
-    species == "ESCCAL" ~ "Eschscholzia californica", # California poppy
-    species == "PENCEN" ~ "Penstemon centranthifolius", # Scarlet bugler
-    species == "GRICAM" ~ "Grindelia camporum", # great valley gumweed
-    species == "SALLEU" ~ "Salvia leucophylla", # Purple sage
-    species == "STIPUL" ~ "Nasella pulchra", # Purple needlegrass
-    species == "LOTSCO" ~ "Acmispon glaber" # deerweed
-  )) %>% 
-  relocate(species_name, .after = species) %>% # moving species_name column after species
-  mutate(water_treatment = case_when( # adding column with full treatment names
-    water == "WW" ~ "Well watered",
-    water == "DS" ~ "Drought stressed"
-  )) %>% 
-  relocate(water_treatment, .after = water) # moving water_treatment column after water
 ```
 
 # Problem 1. Multiple linear regression: model selection and construction (52 points)
@@ -74,70 +43,7 @@ Caption: table captions typically go above the table. Number the table and provi
 
 Table: In your table, each row should be a model with the model number (1, 2, 3, etc.) and the predictors for each model
 
-1. **total mass is not predicted by any of the 3 predictors** (null model)
-
-```{r}
-model1 <- lm(total_g ~ 1, # formula
-             data = drought_exp_clean) # data frame
-```
-
-2. **total mass predicted by SLA, water treatment, and species** (saturated model)
-
-```{r}
-# saturated model
-model2 <- lm(total_g ~ sla + water_treatment + species_name,
-             data = drought_exp_clean)
-```
-
-3. **total biomass as a function of SLA and water treatment**  
-
-```{r}
-model3 <- lm(total_g ~ sla + water_treatment,
-             data = drought_exp_clean)
-```
-
-4. **total biomass as a function of SLA and species**  
-
-```{r}
-model4 <- lm(total_g ~ sla + species_name,
-             data = drought_exp_clean)
-```
-
-5. **total biomass as a function of water treatment and species**
-
-```{r}
-model5 <- lm(total_g ~ water_treatment + species_name,
-             data = drought_exp_clean)
-```
-
 Table of Models
-```{r}
-# comparing models
-modelsummary::modelsummary( # this function takes a list of models
-  list( 
-    "null" = model1, # "model name" = model object
-    "model 2" = model2,
-    "model 3" = model3,
-    "model 4" = model4,
-    "model 5" = model5
-  )
-)
-```
-
-Model selection
-```{r}
-model.sel(model1,
-          model2, 
-          model3, 
-          model4,
-          model5)
-```
-
-Model diagnostics
-```{r}
-par(mfrow = c(2, 2))
-plot(model5)
-```
 
 ## b. Write a 5-6 sentence “statistical methods” section. (8 points)
 Your answer should be in paragraph form and include:
@@ -169,6 +75,30 @@ Show and annotate all your code. For full credit:
 
 - finalize the plot
 
+## Cleaning
+```{r}
+# cleaning the data
+drought_exp_clean <- drought_exp %>% 
+  clean_names() %>% # nicer column names
+  # display species names in full by adding column with species scientific names
+  mutate(species_name = case_when(
+    species == "ENCCAL" ~ "Encelia californica", # bush sunflower
+    species == "ESCCAL" ~ "Eschscholzia californica", # California poppy
+    species == "PENCEN" ~ "Penstemon centranthifolius", # Scarlet bugler
+    species == "GRICAM" ~ "Grindelia camporum", # great valley gumweed
+    species == "SALLEU" ~ "Salvia leucophylla", # Purple sage
+    species == "STIPUL" ~ "Nasella pulchra", # Purple needlegrass
+    species == "LOTSCO" ~ "Acmispon glaber" # deerweed
+  )) %>% 
+  relocate(species_name, .after = species) %>% # moving species_name column after species
+  # display water treatment types in full by adding column with full treatment names
+  mutate(water_treatment = case_when(
+    water == "WW" ~ "Well watered",
+    water == "DS" ~ "Drought stressed"
+  )) %>% 
+  relocate(water_treatment, .after = water) # moving water_treatment column after water
+```
+
 Model predictions
 ```{r}
 model_preds <- ggpredict(model5, 
@@ -176,39 +106,42 @@ model_preds <- ggpredict(model5,
                                    "species_name"))
 ```
 
-
+Visualization of model predictions
 ```{r}
 # creating new data frame of model predictions for plotting
 model_preds_for_plotting <- model_preds %>% 
   rename(water_treatment = x, # renaming columns to make this easier to use
          species_name = group)
-
-# use View(model_preds_for_plotting) 
-# to compare this to the original model_preds data frame
-
-ggplot() +
-  # underlying data
+# visualization of the data
+  ggplot() +
+  # plot the underlying data
   geom_jitter(data = drought_exp_clean,
              aes(x = water_treatment,
                  y = total_g,
-                 color = water_treatment)) +
-  # model prediction 95% CI ribbon
-  geom_ribbon(data = model_preds_for_plotting,
-              aes(x = water_treatment, 
-                  y = predicted,
-                  ymin = conf.low,
-                  ymax = conf.high,
-                  fill = water_treatment),
-              alpha = 0.2) +
-  # model prediction lines
-  geom_line(data = model_preds_for_plotting,
-            aes(x = water_treatment, 
-                y = predicted,
-                color = water_treatment)) +
-  # cleaner theme
-  theme_classic() +
+                 color = water_treatment),
+             alpha = 0.3,
+             width = 0.1, # narrow jitter
+              height = 0) + # not jittering points up and down
+  # plot the model predictions with error bars
+  geom_pointrange(data = model_preds_for_plotting, 
+                  aes(x = water_treatment, 
+                      y = predicted, 
+                      ymin = conf.low, 
+                      ymax = conf.high, 
+                      color = water_treatment)) +
+  # Customizing colors
+  scale_color_manual(values = c("Well watered" = "darkgreen", 
+                                "Drought stressed" = "brown")) +
   # creating different panels for species
-  facet_wrap(~species_name)
+  facet_wrap(~species_name) +
+  # Removing legend
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 60, hjust = 1),
+        plot.title = element_text(size = 16, face = "bold")) +
+  # Adding titles and labels
+  labs(title = "Visualization of Model Predictions",
+       x = "Water Treatment",
+       y = "Total Biomass Predictions")
 ```
 
 ## d. Write a caption for your visualization. (6 points)
