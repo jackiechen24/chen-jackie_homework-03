@@ -45,7 +45,8 @@ Table: In your table, each row should be a model with the model number (1, 2, 3,
 
 Table of Models
 
-Table 1.
+Table 1. Table of Models. Columns are the model number and model predictors, and rows contain information on the model number and predictors for each model.
+![Table of Models](table1.png)
 
 ## b. Write a 5-6 sentence “statistical methods” section. (8 points)
 Your answer should be in paragraph form and include:
@@ -168,7 +169,7 @@ The predictors that "best" described total mass were water treatment and species
 
 ## a. Describe in words what an affective visualization could look like for your personal data (3-5 sentences). (2 points)
 
-An affective visualization could
+For my personal data, an affective visualization could look like representing different shapes and colors for the different values of the variables in my data. Specifically, I could use green outlines of shapes like circles, triangles, and squares to represent the "yes" values, while red outlines of shapes could represent the "no" values for the binary variables (such as Cooking/stove, Leftovers, and Air Fryer). Meanwhile, the different foods in the Foods in Meal variable can be represented with different colors (e.g. the color brown representing meals with a sandwich and the color yellow representing meals with string cheese). Moreover, my affective visualization could have stacked bar plots for different meals, and higher stacked bar plots represent higher food type counts. Different patterns in my affective visualization could represent different locations of where the food was bought (e.g. horizontal striped pattern representing food bought at grocery stores and N/A values of food that does not have a known location of where it was bought will not have a pattern), different types of food (e.g. American food represented by a zigzag pattern, Chinese food represented by a star pattern), and the location of the meal (e.g. meals eaten at my apartment can be represented by a diagonal left pattern and meals eaten at restaurants can be represented by a diagonal right pattern).
 
 ## b. Create a sketch (on paper) of your idea. (2 points)
 Include a photo of this sketch in your submission.
