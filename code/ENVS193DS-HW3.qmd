@@ -11,6 +11,8 @@ format: docx
 
 ## Reading in packages/data
 ```{r}
+#| message: false
+
 # general use
 library(tidyverse)
 library(readxl)
@@ -104,6 +106,11 @@ drought_exp_clean <- drought_exp %>%
 
 Model predictions
 ```{r}
+# model 5: total biomass as a function of water treatment and species
+model5 <- lm(total_g ~ water_treatment + species_name,
+             data = drought_exp_clean)
+
+# model 5 predictions
 model_preds <- ggpredict(model5, 
                          terms = c("water_treatment", 
                                    "species_name"))
@@ -139,8 +146,8 @@ model_preds_for_plotting <- model_preds %>%
   facet_wrap(~species_name) +
   # Removing legend
   theme(legend.position = "none",
-        axis.text.x = element_text(angle = 60, hjust = 1),
-        plot.title = element_text(size = 16, face = "bold")) +
+        axis.text.x = element_text(angle = 60, hjust = 1), # adjust text
+        plot.title = element_text(size = 16, face = "bold")) + # adjust title text size
   # Adding titles and labels
   labs(title = "Model Predictions Visualization with Underlying Data",
        x = "Water Treatment",
@@ -182,6 +189,7 @@ Feel free to be creative with this! You do not have to do this in R. You could c
 If you are making your visualization in R, show the annotated code and the output.
 
 If you are making your visualization outside of R, include a photo of your visualization in your submission.
+
 ![Breakfast Food Bar Plot](breakfastplot.png)
 
 ## d. Write an artist statement. (8 points)
@@ -207,13 +215,43 @@ What are the statistical tests the authors are using to address their main resea
 
 Insert the figure or table you described in Homework 2 here.
 
+The statistical tests the authors used to address their main research question involved testing their multivariate ordinary least squares (OLS) regression model that they specified in their paper. Specifically, the authors used baseline regression analysis, propensity score matching, entropy balancing, instrumental-variable analysis (IV), using a wider event window, testing for coefficient stability, analysis of the components of climate change exposure, and cross-section variations. Propensity score matching consisted of two panels: Diagnostic analysis and Regression analysis, and logistic regression models were used.
+
+![Table 3 in Paper](table3.png)
+
+![Table 4 Panel A in Paper](table4panela.png)
+
+![Table 4 Panel B in Paper](table4panelb.png)
+
+![Table 5 in Paper](table5.png)
+
+![Table 6 in Paper](table6.png)
+
+![Table 7 in Paper](table7.png)
+
+![Table 8 in Paper](table8.png)
+
+![Table 9 in Paper](table9.png)
+
+![Table 10 in Paper](table10.png)
+
+![Table 11 in Paper](table11.png)
+
+![Table 12 in Paper](table12.png)
+
 ## b. Visual clarity (10 points)
 How clearly did the authors visually represent their statistics in figures? For example, are the x- and y-axes in a logical position? Do they show summary statistics (means and SE, for example) and/or model predictions, and if so, do they show the underlying data?
 
+Since the authors only had their results represented in tables, there were no figures present in the article. Thus, not much can be said about the visual clarity. In the tables of the results section of the article, there are regression results, including the number of observations and R-squared values. There is a summary statistics table in the section before the results section that consists of means, SE, 25th precentile, median, and 75th percentile.
+
 ## c. Aesthetic clarity (10 points)
 How well did the authors handle “visual clutter”? How would you describe the the data:ink ratio?
+
+Since the authors did not include any figures besides tables in the article, not much can be said about how the authors handled "visual clutter" and the data:ink ratio. The tables contain various pieces of information. The first table in the article consists of summary statistics. Tables in the results section display regression results for the various statistical tests.
 
 ## d. Recommendations (can be longer than 4 sentences, 10 points)
 What recommendations would you make to make the figure better? What would you take out, add, or change? Provide explanations/justifications for each of your recommendations.
 
 Alternatively, if they did not represent their statistics in a figure, what kind of figure would you recommend to them? Describe the x- and y-axes, with any geometries and aesthetics (colors, etc.). Provide enough explanation such that someone would be able to create the figure you describe in code. Provide explanations/justifications for the figure you would recommend.
+
+The figure that I would recommend to them would be a regression plot. The x-axis would be climate change exposure and the y-axis would be the cumulative abnormal returns (CARs) because the article is testing the favorable hypothesis (firms more exposed to climate change should welcome the signing of the Paris agreement and there should be favorable market reactions as a result) and the adverse reaction hypothesis (companies more susceptible to climate change suffer as a result of the adoption of the Paris Agreement and the market reactions should be negative). Cumulative abnormal returns are the authors' primary proxies for announcement returns. The event windows (-1,1) and (-2,2) were used, and CAR(-5,5) was used when testing for a wider event window. The cumulative abormal return is calculated as the difference between the raw return on a certain stock on a given event day and the predicted return. The variety of control variables that may impact stock market reactions can be part of the aesthetics (such as color) because they could also potentially affect cumulative abnormal returns, although they are not regarded as the main variables like climate change exposure is.
