@@ -182,6 +182,7 @@ Feel free to be creative with this! You do not have to do this in R. You could c
 If you are making your visualization in R, show the annotated code and the output.
 
 If you are making your visualization outside of R, include a photo of your visualization in your submission.
+![Breakfast Food Bar Plot](breakfastplot.png)
 
 ## d. Write an artist statement. (8 points)
 An artist statement gives the audience context to understand your work. Write 4-5 sentences to address:
@@ -193,6 +194,8 @@ An artist statement gives the audience context to understand your work. Write 4-
 - the form of your work (written code, watercolor, oil painting, etc.)
 
 - your process (how did you create your work?)
+
+The plot shows the food bar plot for different meals that I have eaten during breakfast from April 22, 2024 to May 28, 2024. I was influenced by Stefanie Posavec and Giorgia Lupi’s Dear Data project. My work is in the form of an online design from Canva, which was what I used to create my work. I used the presentation format in Canva and created my work by adding text, shapes, shape outlines, drawings (including those of various patterns), and images to create the bar plots and legend to show what the shapes, shape outlines, patterns represent.
 
 # Problem 3. Statistical critique (36 points)
 At this point, you have seen and created a lot of figures for this class. Revisit the paper you chose for your critique and your homework 2, where you described figures or tables in the text. Address the following in full sentences (3-4 sentences each).
